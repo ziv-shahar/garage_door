@@ -1,26 +1,143 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: oklch(0.18 0.012 250);
+  --ink-2: oklch(0.30 0.012 250);
+  --ink-3: oklch(0.50 0.010 250);
+  --paper: oklch(0.97 0.008 75);
+  --paper-2: oklch(0.94 0.010 75);
+  --paper-3: oklch(0.89 0.012 75);
+  --line: oklch(0.82 0.012 75);
+  --amber: oklch(0.72 0.17 60);
+  --amber-deep: oklch(0.58 0.18 50);
+  --amber-soft: oklch(0.93 0.05 75);
+  --green: oklch(0.62 0.13 150);
+  --red: oklch(0.58 0.20 25);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-paper-3: var(--paper-3);
+  --color-line: var(--line);
+  --color-amber: var(--amber);
+  --color-amber-deep: var(--amber-deep);
+  --color-amber-soft: var(--amber-soft);
+  --color-green: var(--green);
+  --color-red: var(--red);
+
+  --font-display: "Big Shoulders Display", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "Manrope", system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-manrope), 'Manrope', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; }
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: 16px;
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  color: var(--ink);
+  padding: 14px 16px;
+  border-radius: 0;
+  width: 100%;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--ink);
+  background: white;
+}
+.field-error input, .field-error textarea, .field-error select {
+  border-color: var(--red);
+  background: oklch(0.98 0.025 25);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 24px;
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: transform 120ms ease, background 140ms ease, color 140ms ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--ink); color: var(--paper); }
+.btn-primary:hover { background: var(--amber-deep); }
+.btn-amber { background: var(--amber); color: var(--ink); }
+.btn-amber:hover { background: var(--amber-deep); color: var(--paper); }
+.btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+.btn-ghost:hover { background: var(--ink); color: var(--paper); }
+
+.display {
+  font-family: var(--font-big-shoulders), 'Big Shoulders Display', 'Big Shoulders', sans-serif;
+  letter-spacing: -0.005em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+.mono { font-family: var(--font-jetbrains), 'JetBrains Mono', monospace; }
+
+.marquee-track {
+  display: flex;
+  gap: 48px;
+  animation: marquee 38s linear infinite;
+  white-space: nowrap;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.stripe-bg {
+  background-image: repeating-linear-gradient(135deg, var(--paper-2) 0 12px, var(--paper-3) 12px 24px);
+}
+
+.stars {
+  color: var(--amber-deep);
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+.page-enter {
+  animation: fadeIn 360ms cubic-bezier(.2,.6,.2,1);
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 1.8s ease-out infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 oklch(0.62 0.13 150 / 0.45); }
+  70% { box-shadow: 0 0 0 10px oklch(0.62 0.13 150 / 0); }
+  100% { box-shadow: 0 0 0 0 oklch(0.62 0.13 150 / 0); }
 }
