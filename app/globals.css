@@ -141,3 +141,17 @@ input:focus, textarea:focus, select:focus {
   70% { box-shadow: 0 0 0 10px oklch(0.62 0.13 150 / 0); }
   100% { box-shadow: 0 0 0 0 oklch(0.62 0.13 150 / 0); }
 }
+
+/* Responsive section padding */
+.section-pad { padding: 48px 16px; }
+@media (min-width: 768px) { .section-pad { padding: 64px 32px; } }
+@media (min-width: 1024px) { .section-pad { padding: 80px 32px; } }
+
+/* Hamburger lines transition */
+.ham-line {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--ink);
+  transition: transform 200ms ease, opacity 200ms ease;
+}

@@ -40,8 +40,8 @@ function FooterCol({
 export function Footer() {
   return (
     <footer style={{ background: "var(--ink)", color: "var(--paper)", borderTop: "1.5px solid var(--ink)" }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "64px 32px 24px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 48 }}>
+      <div className="max-w-[1280px] mx-auto px-4 pt-10 pb-6 md:px-8 md:pt-16 lg:pt-[64px] lg:pb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-10 lg:gap-12">
           <div>
             <Logo light />
             <p style={{ marginTop: 18, color: "var(--paper-3)", maxWidth: 340, fontSize: 14, lineHeight: 1.6 }}>

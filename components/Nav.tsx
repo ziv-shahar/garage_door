@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
@@ -16,6 +17,11 @@ const marqueeItems = [
 
 export function Nav() {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   const tabs = [
     { href: "/", label: "Home" },
@@ -29,25 +35,9 @@ export function Nav() {
   };
 
   return (
-    <header
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
-        background: "var(--paper)",
-        borderBottom: "1.5px solid var(--ink)",
-      }}
-    >
-      {/* Top utility strip */}
-      <div
-        style={{
-          background: "var(--ink)",
-          color: "var(--paper)",
-          fontSize: 12,
-          padding: "8px 0",
-          overflow: "hidden",
-        }}
-      >
+    <header className="sticky top-0 z-50" style={{ background: "var(--paper)", borderBottom: "1.5px solid var(--ink)" }}>
+      {/* Marquee strip */}
+      <div style={{ background: "var(--ink)", color: "var(--paper)", fontSize: 12, padding: "8px 0", overflow: "hidden" }}>
         <div className="marquee-track mono" style={{ letterSpacing: "0.14em" }}>
           {Array.from({ length: 2 }).map((_, k) => (
             <div key={k} style={{ display: "flex", gap: 48, paddingRight: 48 }}>
@@ -59,82 +49,98 @@ export function Nav() {
         </div>
       </div>
 
-      <div
-        style={{
-          maxWidth: 1280,
-          margin: "0 auto",
-          padding: "18px 32px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 24,
-        }}
-      >
+      {/* Main bar */}
+      <div className="max-w-[1280px] mx-auto px-4 py-3 md:px-8 md:py-[18px] flex items-center justify-between gap-4">
         <Link href="/" style={{ background: "none", border: "none", padding: 0 }}>
           <Logo />
         </Link>
 
-        <nav style={{ display: "flex", alignItems: "center", gap: 4 }}>
+        {/* Desktop nav links */}
+        <nav className="hidden md:flex items-center gap-1">
           {tabs.map((t) => (
             <Link
               key={t.href}
               href={t.href}
+              className="relative no-underline"
               style={{
-                background: "transparent",
-                border: "none",
+                display: "inline-block",
                 padding: "10px 18px",
                 fontWeight: isActive(t.href) ? 700 : 500,
                 fontSize: 14,
                 letterSpacing: "0.04em",
                 color: isActive(t.href) ? "var(--ink)" : "var(--ink-2)",
-                position: "relative",
-                textDecoration: "none",
-                display: "inline-block",
               }}
             >
               {t.label}
               {isActive(t.href) && (
-                <div
-                  style={{
-                    position: "absolute",
-                    left: 18,
-                    right: 18,
-                    bottom: 4,
-                    height: 2,
-                    background: "var(--amber)",
-                  }}
-                />
+                <div style={{ position: "absolute", left: 18, right: 18, bottom: 4, height: 2, background: "var(--amber)" }} />
               )}
             </Link>
           ))}
         </nav>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <span
-              className="badge"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "6px 12px",
-                background: "var(--paper-2)",
-                border: "1px solid var(--line)",
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-              }}
-            >
-              <span className="pulse" />
-              On-call now
-            </span>
-          </div>
+        {/* Desktop right side */}
+        <div className="hidden md:flex items-center gap-3.5">
+          <span
+            className="inline-flex items-center gap-2"
+            style={{ padding: "6px 12px", background: "var(--paper-2)", border: "1px solid var(--line)", fontSize: 11, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase" }}
+          >
+            <span className="pulse" />
+            On-call now
+          </span>
           <a href="tel:9195550143" className="btn btn-amber" style={{ padding: "12px 18px" }}>
             <IconPhone size={16} /> (919) 555·0143
           </a>
         </div>
+
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px]"
+          onClick={() => setMenuOpen((o) => !o)}
+          aria-label="Toggle menu"
+          style={{ background: "none", border: "none", flexShrink: 0 }}
+        >
+          <span
+            className="ham-line"
+            style={{ transform: menuOpen ? "rotate(45deg) translate(3.5px, 3.5px)" : "none" }}
+          />
+          <span className="ham-line" style={{ opacity: menuOpen ? 0 : 1 }} />
+          <span
+            className="ham-line"
+            style={{ transform: menuOpen ? "rotate(-45deg) translate(3.5px, -3.5px)" : "none" }}
+          />
+        </button>
       </div>
+
+      {/* Mobile dropdown */}
+      {menuOpen && (
+        <div className="md:hidden" style={{ borderTop: "1.5px solid var(--ink)", background: "var(--paper)" }}>
+          {tabs.map((t) => (
+            <Link
+              key={t.href}
+              href={t.href}
+              className="block px-6 py-4 no-underline text-base"
+              style={{
+                borderBottom: "1px solid var(--line)",
+                fontWeight: isActive(t.href) ? 700 : 500,
+                color: "var(--ink)",
+                background: isActive(t.href) ? "var(--amber-soft)" : "transparent",
+              }}
+            >
+              {t.label}
+            </Link>
+          ))}
+          <div className="p-4" style={{ borderTop: "1px solid var(--line)" }}>
+            <a
+              href="tel:9195550143"
+              className="btn btn-amber"
+              style={{ width: "100%", justifyContent: "center" }}
+            >
+              <IconPhone size={16} /> (919) 555·0143
+            </a>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
